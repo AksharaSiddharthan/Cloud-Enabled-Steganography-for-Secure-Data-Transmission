@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Steganography</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Logo at top-left */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .half {
+            width: 50%;
+            padding: 80px 40px 40px 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .encode {
+            background-color: #f2f9f2;
+        }
+        .decode {
+            background-color: #f2f2fb;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            border: none;
+            color: #fff;
+            background-color: #007bff;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .decoded-message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* Footer at bottom-right */
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">☁️ Steganographer</div>
+
+    <div class="half encode">
+        <h2>Encode Message into Image</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="encode">
+            <input type="file" name="image" accept="image/*" required>
+            <textarea name="message" placeholder="Enter your message here..." required></textarea>
+            <button type="submit">Encode & Download</button>
+        </form>
+    </div>
+
+    <div class="half decode">
+        <h2>Decode Message from Image</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="decode">
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit">Decode Message</button>
+        </form>
+        {% if decoded_message %}
+            <div class="decoded-message">Message: {{ decoded_message }}</div>
+        {% endif %}
+    </div>
+
+    <div class="footer">Creators @ Medhini & Akshara</div>
+</body>
+</html>
