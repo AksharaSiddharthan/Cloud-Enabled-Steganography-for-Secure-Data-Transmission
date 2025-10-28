@@ -53,5 +53,5 @@ def decode(stego_path):
     return message
 
 if __name__ == "__main__":
-    decoded_message = decode("stego.png")
+    decoded_message = decode("test1.png")
     print(" Decoded message:", decoded_message)
