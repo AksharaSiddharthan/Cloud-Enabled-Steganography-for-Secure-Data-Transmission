@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Decode Stego Message</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>🔍 Decode Hidden Message</h1>
+    <a href="/" class="link">← Go to Encoder</a>
+
+    {% if error %}
+        <div class="alert error">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+        <div class="alert success">
+            ✅ Message decoded successfully!<br><br>
+            <b>Hidden Message:</b><br>
+            <pre>{{ message }}</pre>
+        </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <label for="stego">Upload Stego Image:</label>
+        <input type="file" name="stego" accept="image/*" required>
+        <button type="submit" class="btn">🕵️ Decode</button>
+    </form>
+</div>
+</body>
+</html>
