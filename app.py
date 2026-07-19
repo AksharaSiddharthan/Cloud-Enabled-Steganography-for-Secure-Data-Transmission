@@ -1,16 +1,16 @@
 
-from flask import Flask, render_template, request, send_file, redirect, url_for
+from flask import Flask, render_template, request, send_file 
 from werkzeug.utils import secure_filename
 from io import BytesIO
-from PIL import Image
+from encode import encode
+from decode import decode
+import os
 
-import stegano
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 
 # Ensure uploads folder exists
-import os
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @app.route("/", methods=["GET", "POST"])
@@ -30,18 +30,23 @@ def index():
             if action == "encode":
                 message = request.form.get("message")
                 if message:
-                    # Encode message into image
-                    from stegano import lsb
-                    secret = lsb.hide(filepath, message)
-                    output = BytesIO()
-                    secret.save(output, format="PNG")
-                    output.seek(0)
-                    return send_file(output, as_attachment=True, download_name="encoded.png", mimetype="image/png")
+                    output_filename = "encoded_" + filename
+                    output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
+
+                    encode(filepath, output_path, message)
+
+                    return send_file(
+                        output_path,
+                        as_attachment=True,
+                        download_name="encoded.png",
+                        mimetype="image/png"
+                    )
             elif action == "decode":
-                # Decode message from image
-                from stegano import lsb
-                secret_message = lsb.reveal(filepath)
-                decoded_message = secret_message if secret_message else "No hidden message found."
+                try:
+                    secret_message = decode(filepath)
+                    decoded_message = secret_message if secret_message else "No hidden message found."
+                except Exception as e:
+                    decoded_message = f"Decoding failed: {str(e)}"
 
     return render_template("index.html", decoded_message=decoded_message)
   
